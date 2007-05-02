@@ -2,8 +2,8 @@
 
 Summary:	A spam filter for email which can be invoked from mail delivery agents
 Name:		spamassassin
-Version:	3.1.8
-Release:	%mkrel 3
+Version:	3.2.0
+Release:	%mkrel 1
 License:	Apache License
 Group:		Networking/Mail
 URL:		http://spamassassin.org/
@@ -15,10 +15,8 @@ Source4:	spamassassin-default.rc
 Source5:	spamassassin-spamc.rc
 Source6:	sa-update.cron
 # (fc) 2.60-5mdk don't use version dependent perl call in #!
-Patch0:		spamassassin-3.1.0-fixbang.diff
+Patch0:		spamassassin-3.2.0-fixbang.patch
 Patch1:		Mail-SpamAssassin-3.1.5-no_spamcop.diff
-# http://issues.apache.org/SpamAssassin/show_bug.cgi?id=5336
-Patch2:		spamassassin-3.1.8-sa-learn.patch
 Requires(post): rpm-helper
 Requires(preun): rpm-helper
 BuildRequires:	openssl-devel
@@ -129,9 +127,8 @@ user's own mail user-agent application.
 %prep
 
 %setup -q -n %{fname}-%{version}
-%patch0 -p0 -b .fixbang
+%patch0 -p1 -b .fixbang
 %patch1 -p0
-%patch2 -p1
 
 cp %{SOURCE2} spamd.init
 cp %{SOURCE3} spamd.sysconfig
@@ -229,7 +226,8 @@ fi
 
 %files
 %defattr(-,root,root)
-%doc README Changes sample-*.txt procmailrc.example INSTALL TRADEMARK USAGE 
+%doc README Changes sample-*.txt procmailrc.example INSTALL TRADEMARK
+%doc CREDITS UPGRADE USAGE
 %dir %{_sysconfdir}/mail/%{name}
 %dir %{_sysconfdir}/mail/%{name}/sa-update-keys
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/mail/%{name}/*.cf
@@ -237,9 +235,11 @@ fi
 %config(noreplace) %{_sysconfdir}/mail/%{name}/spamassassin-default.rc
 %dir %attr(0777,root,root) /var/spool/spamassassin
 %dir %{_localstatedir}/spamassassin
+%attr(0755,root,root) %{_bindir}/sa-compile
 %attr(0755,root,root) %{_bindir}/sa-learn
 %attr(0755,root,root) %{_bindir}/spamassassin
 %attr(0755,root,root) %{_bindir}/sa-update
+%{_mandir}/man1/sa-compile.1*
 %{_mandir}/man1/sa-learn.1*
 %{_mandir}/man1/spamassassin.1*
 %{_mandir}/man1/sa-update.1*
@@ -248,7 +248,7 @@ fi
 
 %files tools
 %defattr(-,root,root)
-%doc sql tools masses contrib 
+%doc sql ldap
 
 %files spamd
 %defattr(-,root,root)
