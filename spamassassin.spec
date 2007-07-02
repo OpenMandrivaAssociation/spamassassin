@@ -47,6 +47,7 @@ Requires:	perl-Mail-SPF-Query
 Requires:	perl-Net-Ident
 Requires:	perl-Sys-Hostname-Long 
 Requires:	perl-libwww-perl
+Requires:	perl-Encode-Detect
 Requires:	gnupg
 Buildroot:	%{_tmppath}/%{name}-%{version}-root
 
