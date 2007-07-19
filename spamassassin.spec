@@ -255,7 +255,7 @@ fi
 %files spamd
 %defattr(-,root,root)
 %doc spamd/README* spamd/PROTOCOL
-%attr(0755,root,root) %{_sysconfdir}/cron.daily/sa-update
+%attr(0700,root,root) %{_sysconfdir}/cron.daily/sa-update
 %attr(0755,root,root) %{_initrddir}/spamd
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/sysconfig/spamd
 %attr(0755,root,root) %{_bindir}/spamd
@@ -273,5 +273,3 @@ fi
 %{perl_vendorlib}/Mail/SpamAssassin*
 %{perl_vendorlib}/spamassassin-run.pod
 %{_mandir}/man3*/*
-
-
