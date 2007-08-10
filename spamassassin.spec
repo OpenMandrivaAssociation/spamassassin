@@ -2,7 +2,7 @@
 
 Summary:	A spam filter for email which can be invoked from mail delivery agents
 Name:		spamassassin
-Version:	3.2.2
+Version:	3.2.3
 Release:	%mkrel 1
 License:	Apache License
 Group:		Networking/Mail
