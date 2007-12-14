@@ -116,7 +116,7 @@ overhead in loading, so it should be much faster to load than the
 whole spamassassin program.
 
 %package -n	perl-%{fname}
-Summary:        Mail::SpamAssassin -- SpamAssassin e-mail filter Perl modules
+Summary:        SpamAssassin e-mail filter Perl modules
 Group:		Development/Perl
 
 %description -n perl-%{fname}
