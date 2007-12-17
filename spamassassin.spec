@@ -51,7 +51,6 @@ Requires:	perl-Encode-Detect
 Requires:	perl-Mail-SPF
 Requires:	perl-version
 Requires:	gnupg
-Buildroot:	%{_tmppath}/%{name}-%{version}-root
 
 %description
 SpamAssassin provides you with a way to reduce if not completely eliminate
