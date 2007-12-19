@@ -3,7 +3,7 @@
 Summary:	A spam filter for email which can be invoked from mail delivery agents
 Name:		spamassassin
 Version:	3.2.3
-Release:	%mkrel 3
+Release:	%mkrel 4
 License:	Apache License
 Group:		Networking/Mail
 URL:		http://spamassassin.org/
@@ -52,6 +52,7 @@ Requires:	perl-Mail-SPF
 Requires:	perl-version
 Requires:	gnupg
 Requires:	re2c
+Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-root
 
 %description
 SpamAssassin provides you with a way to reduce if not completely eliminate
