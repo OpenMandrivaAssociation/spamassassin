@@ -2,8 +2,8 @@
 
 Summary:	A spam filter for email which can be invoked from mail delivery agents
 Name:		spamassassin
-Version:	3.2.3
-Release:	%mkrel 4
+Version:	3.2.4
+Release:	%mkrel 1
 License:	Apache License
 Group:		Networking/Mail
 URL:		http://spamassassin.org/
@@ -78,7 +78,6 @@ INCLUDERC=/etc/mail/spamassassin/spamassassin-default.rc
  
 To filter spam for all users, add that line to /etc/procmailrc
 (creating if necessary).
-
 
 %package	tools
 Summary:        Miscleanous tools for SpamAssassin
