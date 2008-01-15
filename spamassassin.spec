@@ -118,6 +118,7 @@ whole spamassassin program.
 %package -n	perl-%{fname}
 Summary:        SpamAssassin e-mail filter Perl modules
 Group:		Development/Perl
+Requires:       perl(HTML::Parser)
 
 %description -n perl-%{fname}
 Mail::SpamAssassin is a module to identify spam using text analysis and
