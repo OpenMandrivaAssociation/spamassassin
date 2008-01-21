@@ -23,7 +23,6 @@ BuildRequires:	openssl-devel
 BuildRequires:	perl-Archive-Tar
 BuildRequires:	perl-Digest-SHA1
 BuildRequires:	perl-HTML-Parser
-BuildRequires:	perl-INET6
 BuildRequires:	perl-IO-Socket-SSL
 BuildRequires:	perl-IO-Zlib
 BuildRequires:	perl-IP-Country
@@ -39,7 +38,6 @@ Requires:	perl-Net-DNS
 Requires:  	perl-DB_File
 # (oe) these are not required, but if not it cripples the SpamAssassin functionalities
 Requires:	perl-Archive-Tar
-Requires:	perl-INET6
 Requires:	perl-IO-Socket-SSL
 Requires:	perl-IO-Zlib
 Requires:	perl-IP-Country
