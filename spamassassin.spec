@@ -3,7 +3,7 @@
 Summary:	A spam filter for email which can be invoked from mail delivery agents
 Name:		spamassassin
 Version:	3.2.4
-Release:	%mkrel 2
+Release:	%mkrel 3
 License:	Apache License
 Group:		Networking/Mail
 URL:		http://spamassassin.org/
@@ -14,6 +14,8 @@ Source3:	spamd.sysconfig
 Source4:	spamassassin-default.rc
 Source5:	spamassassin-spamc.rc
 Source6:	sa-update.cron
+Source7:	spamd.logrotate
+Source8:	spamd.conf
 # (fc) 2.60-5mdk don't use version dependent perl call in #!
 Patch0:		spamassassin-3.2.0-fixbang.patch
 Patch1:		Mail-SpamAssassin-3.1.5-no_spamcop.diff
@@ -50,7 +52,7 @@ Requires:	perl-Mail-SPF
 Requires:	perl-version
 Requires:	gnupg
 Requires:	re2c
-Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-root
+Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 SpamAssassin provides you with a way to reduce if not completely eliminate
@@ -126,6 +128,16 @@ wide range of heuristic tests on mail headers and body text to identify
 mail can then be optionally tagged as spam for later filtering using the
 user's own mail user-agent application.
 
+%package -n	perl-%{fname}-Spamd
+Summary:        A mod_perl2 module implementing the spamd protocol
+Group:		Development/Perl
+Requires:       apache-mod_perl
+
+%description -n	perl-%{fname}-Spamd
+This distribution contains a mod_perl2 module, implementing the spamd protocol
+from the SpamAssassin (http://spamassassin.apache.org/) project in Apache2.
+It's mostly compatible with the original spamd.
+
 %prep
 
 %setup -q -n %{fname}-%{version}
@@ -135,6 +147,8 @@ user's own mail user-agent application.
 cp %{SOURCE2} spamd.init
 cp %{SOURCE3} spamd.sysconfig
 cp %{SOURCE6} sa-update.cron
+cp %{SOURCE7} spamd.logrotate
+cp %{SOURCE8} spamd.conf
 
 %build
 
@@ -147,6 +161,11 @@ cp %{SOURCE6} sa-update.cron
     RUN_NET_TESTS=no < /dev/null
 
 %make OPTIMIZE="%{optflags}" 
+
+pushd spamd-apache2
+    %{__perl} Makefile.PL INSTALLDIRS=vendor < /dev/null
+    %make
+popd
 
 #cat >> t/config.dist << EOF
 #run_net_tests=y
@@ -164,12 +183,18 @@ make FULLPERL="%{_bindir}/perl" test
 
 %makeinstall_std
 
+pushd spamd-apache2
+    %makeinstall_std
+popd
+
 install -d %{buildroot}%{_sysconfdir}/mail/%{name}/sa-update-keys
 install -d %{buildroot}%{_sysconfdir}/sysconfig
 install -d %{buildroot}%{_sysconfdir}/cron.daily
+install -d %{buildroot}%{_sysconfdir}/logrotate.d
 install -d %{buildroot}%{_initrddir}
 install -d %{buildroot}/var/spool/spamassassin
 install -d %{buildroot}%{_localstatedir}/spamassassin
+install -d %{buildroot}%{_sysconfdir}/httpd/conf/webapps.d
 
 cat << EOF >> %{buildroot}%{_sysconfdir}/mail/%{name}/local.cf
 required_hits 5
@@ -182,9 +207,15 @@ EOF
 install -m0755 spamd.init %{buildroot}%{_initrddir}/spamd
 install -m0644 spamd.sysconfig %{buildroot}%{_sysconfdir}/sysconfig/spamd
 install -m0755 sa-update.cron %{buildroot}%{_sysconfdir}/cron.daily/sa-update
+install -m0644 spamd.logrotate %{buildroot}%{_sysconfdir}/logrotate.d/spamd
+install -m0644 spamd.conf %{buildroot}/%{_sysconfdir}/httpd/conf/webapps.d/spamd.conf
 
 install -m0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/mail/spamassassin/
 install -m0644 %{SOURCE5} %{buildroot}%{_sysconfdir}/mail/spamassassin/
+
+# cleanup
+rm -f %{buildroot}%{_bindir}/apache-spamd.pl
+rm -f %{buildroot}%{_mandir}/man1/apache-spamd.pl.1*
 
 %clean
 [ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
@@ -226,6 +257,18 @@ fi
 %preun spamd
 %_preun_service spamd
 
+%post -n perl-%{fname}-Spamd
+if [ -f %{_var}/lock/subsys/httpd ]; then
+    %{_initrddir}/httpd restart 1>&2;
+fi
+
+%postun -n perl-%{fname}-Spamd
+if [ "$1" = "0" ]; then
+    if [ -f %{_var}/lock/subsys/httpd ]; then
+        %{_initrddir}/httpd restart 1>&2
+    fi
+fi
+
 %files
 %defattr(-,root,root)
 %doc README Changes sample-*.txt procmailrc.example INSTALL TRADEMARK
@@ -258,6 +301,7 @@ fi
 %attr(0700,root,root) %{_sysconfdir}/cron.daily/sa-update
 %attr(0755,root,root) %{_initrddir}/spamd
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/sysconfig/spamd
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/logrotate.d/spamd
 %attr(0755,root,root) %{_bindir}/spamd
 %{_mandir}/man1/spamd.1*
 
@@ -271,5 +315,19 @@ fi
 %defattr(644,root,root,755)
 %dir %{perl_vendorlib}/Mail
 %{perl_vendorlib}/Mail/SpamAssassin*
+%exclude %{perl_vendorlib}/Mail/SpamAssassin/Spamd
+%exclude %{perl_vendorlib}/Mail/SpamAssassin/Spamd.pm
 %{perl_vendorlib}/spamassassin-run.pod
 %{_mandir}/man3*/*
+%exclude %{_mandir}/man3/Mail::SpamAssassin::Spamd::*
+%exclude %{_mandir}/man3/Mail::SpamAssassin::Spamd.*
+
+%files -n perl-%{fname}-Spamd
+%defattr(644,root,root,755)
+%doc spamd-apache2/README.apache
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/httpd/conf/webapps.d/spamd.conf
+%dir %{perl_vendorlib}/Mail/SpamAssassin/Spamd
+%{perl_vendorlib}/Mail/SpamAssassin/Spamd/*
+%{perl_vendorlib}/Mail/SpamAssassin/Spamd.pm
+%{_mandir}/man3/Mail::SpamAssassin::Spamd::*
+%{_mandir}/man3/Mail::SpamAssassin::Spamd.*
