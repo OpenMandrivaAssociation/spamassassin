@@ -35,6 +35,7 @@ BuildRequires:	perl-Time-HiRes
 BuildRequires:	perl-devel
 BuildRequires:	perl-DB_File
 BuildRequires:	perl-libwww-perl
+BuildRequires:	perl-Apache-Test
 Requires:	perl-Mail-SpamAssassin = %{version}
 Requires:	perl-Net-DNS
 Requires:  	perl-DB_File
