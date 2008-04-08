@@ -194,6 +194,7 @@ install -d %{buildroot}%{_sysconfdir}/cron.daily
 install -d %{buildroot}%{_sysconfdir}/logrotate.d
 install -d %{buildroot}%{_initrddir}
 install -d %{buildroot}/var/spool/spamassassin
+install -d %{buildroot}/var/log/spamassassin
 install -d %{buildroot}%{_localstatedir}/spamassassin
 install -d %{buildroot}%{_sysconfdir}/httpd/conf/webapps.d
 
@@ -305,6 +306,7 @@ fi
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/logrotate.d/spamd
 %attr(0755,root,root) %{_bindir}/spamd
 %{_mandir}/man1/spamd.1*
+%dir %attr(0755,root,root) /var/log/spamassassin
 
 %files spamc
 %defattr(-,root,root)
