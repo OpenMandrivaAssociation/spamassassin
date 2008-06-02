@@ -195,7 +195,7 @@ install -d %{buildroot}%{_sysconfdir}/logrotate.d
 install -d %{buildroot}%{_initrddir}
 install -d %{buildroot}/var/spool/spamassassin
 install -d %{buildroot}/var/log/spamassassin
-install -d %{buildroot}%{_localstatedir}/spamassassin
+install -d %{buildroot}%{_localstatedir}/lib/spamassassin
 install -d %{buildroot}%{_sysconfdir}/httpd/conf/webapps.d
 
 cat << EOF >> %{buildroot}%{_sysconfdir}/mail/%{name}/local.cf
@@ -281,7 +281,7 @@ fi
 %config(noreplace) %{_sysconfdir}/mail/%{name}/*.pre
 %config(noreplace) %{_sysconfdir}/mail/%{name}/spamassassin-default.rc
 %dir %attr(0777,root,root) /var/spool/spamassassin
-%dir %{_localstatedir}/spamassassin
+%dir %{_localstatedir}/lib/spamassassin
 %attr(0755,root,root) %{_bindir}/sa-compile
 %attr(0755,root,root) %{_bindir}/sa-learn
 %attr(0755,root,root) %{_bindir}/spamassassin
