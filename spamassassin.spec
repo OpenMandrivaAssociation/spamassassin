@@ -3,7 +3,7 @@
 Summary:	A spam filter for email which can be invoked from mail delivery agents
 Name:		spamassassin
 Version:	3.2.5
-Release:	%mkrel 1
+Release:	%mkrel 2
 License:	Apache License
 Group:		Networking/Mail
 URL:		http://spamassassin.org/
@@ -40,19 +40,13 @@ Requires:	perl-Mail-SpamAssassin = %{version}
 Requires:	perl-Net-DNS
 Requires:  	perl-DB_File
 # (oe) these are not required, but if not it cripples the SpamAssassin functionalities
-Requires:	perl-Archive-Tar
-Requires:	perl-IO-Socket-SSL
-Requires:	perl-IO-Zlib
-Requires:	perl-IP-Country
-Requires:	perl-Mail-SPF-Query
-Requires:	perl-Net-Ident
-Requires:	perl-Sys-Hostname-Long 
-Requires:	perl-libwww-perl
-Requires:	perl-Encode-Detect
-Requires:	perl-Mail-SPF
-Requires:	perl-version
-Requires:	gnupg
-Requires:	re2c
+%define opt_deps perl-Archive-Tar perl-Encode-Detect perl-IO-Socket-SSL perl-IO-Zlib perl-IP-Country perl-Mail-DomainKeys perl-Mail-SPF perl-Mail-SPF-Query perl-Net-Ident perl-Sys-Hostname-Long perl-libwww-perl perl-version gnupg re2c
+%if %mdkversion < 200810
+Requires:	%{opt_deps}
+%endif
+%if %mdkversion >= 200810
+Suggests:	%{opt_deps}
+%endif
 Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
@@ -180,7 +174,7 @@ export LANGUAGE=C
 make FULLPERL="%{_bindir}/perl" test
 
 %install
-[ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
+rm -rf %{buildroot}
 
 %makeinstall_std
 
@@ -195,7 +189,7 @@ install -d %{buildroot}%{_sysconfdir}/logrotate.d
 install -d %{buildroot}%{_initrddir}
 install -d %{buildroot}/var/spool/spamassassin
 install -d %{buildroot}/var/log/spamassassin
-install -d %{buildroot}%{_localstatedir}/lib/spamassassin
+install -d %{buildroot}/var/lib/spamassassin
 install -d %{buildroot}%{_sysconfdir}/httpd/conf/webapps.d
 
 cat << EOF >> %{buildroot}%{_sysconfdir}/mail/%{name}/local.cf
@@ -218,9 +212,6 @@ install -m0644 %{SOURCE5} %{buildroot}%{_sysconfdir}/mail/spamassassin/
 # cleanup
 rm -f %{buildroot}%{_bindir}/apache-spamd.pl
 rm -f %{buildroot}%{_mandir}/man1/apache-spamd.pl.1*
-
-%clean
-[ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
 
 %post
 [ -f %{_sysconfdir}/spamassassin.cf ] && %{__mv} %{_sysconfdir}/spamassassin.cf %{_sysconfdir}/mail/spamassassin/migrated.cf || true
@@ -271,6 +262,9 @@ if [ "$1" = "0" ]; then
     fi
 fi
 
+%clean
+rm -rf %{buildroot}
+
 %files
 %defattr(-,root,root)
 %doc README Changes sample-*.txt procmailrc.example INSTALL TRADEMARK
@@ -281,7 +275,7 @@ fi
 %config(noreplace) %{_sysconfdir}/mail/%{name}/*.pre
 %config(noreplace) %{_sysconfdir}/mail/%{name}/spamassassin-default.rc
 %dir %attr(0777,root,root) /var/spool/spamassassin
-%dir %{_localstatedir}/lib/spamassassin
+%dir /var/lib/spamassassin
 %attr(0755,root,root) %{_bindir}/sa-compile
 %attr(0755,root,root) %{_bindir}/sa-learn
 %attr(0755,root,root) %{_bindir}/spamassassin
