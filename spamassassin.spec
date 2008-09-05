@@ -3,7 +3,7 @@
 Summary:	A spam filter for email which can be invoked from mail delivery agents
 Name:		spamassassin
 Version:	3.2.5
-Release:	%mkrel 3
+Release:	%mkrel 4
 License:	Apache License
 Group:		Networking/Mail
 URL:		http://spamassassin.org/
@@ -38,10 +38,9 @@ BuildRequires:	perl-libwww-perl
 BuildRequires:	perl-Apache-Test
 Requires:	perl-Mail-SpamAssassin = %{version}
 Requires:  	perl-DB_File
-Requires:  	perl-devel
 Requires:	perl-Net-DNS
 # (oe) these are not required, but if not it cripples the SpamAssassin functionalities
-%define opt_deps perl-Archive-Tar perl-Encode-Detect perl-IO-Socket-SSL perl-IO-Zlib perl-IP-Country perl-Mail-DomainKeys perl-Mail-SPF perl-Mail-SPF-Query perl-Net-Ident perl-Sys-Hostname-Long perl-libwww-perl perl-version gnupg re2c
+%define opt_deps perl-Archive-Tar perl-Encode-Detect perl-IO-Socket-SSL perl-IO-Zlib perl-IP-Country perl-Mail-DomainKeys perl-Mail-SPF perl-Mail-SPF-Query perl-Net-Ident perl-Sys-Hostname-Long perl-libwww-perl perl-version gnupg
 %if %mdkversion < 200810
 Requires:	%{opt_deps}
 %endif
@@ -74,6 +73,24 @@ INCLUDERC=/etc/mail/spamassassin/spamassassin-default.rc
  
 To filter spam for all users, add that line to /etc/procmailrc
 (creating if necessary).
+
+%package	sa-compile
+Summary:	Compiles SpamAssassin rulesets into native perl code
+Group:		Networking/Mail
+Requires:	gcc
+Requires:	perl-devel
+Requires:	re2c
+Conflicts:	spamassassin < 3.2.5-3
+
+%description	sa-compile
+sa-compile uses re2c to compile the site-wide parts of the SpamAssassin
+ruleset. No part of user_prefs or any files included from user_prefs can be
+built into the compiled set. This compiled set is then used by the
+"Mail::SpamAssassin::Plugin::Rule2XSBody" plugin to speed up SpamAssassin's
+operation, where possible, and when that plugin is loaded. re2c can match
+strings much faster than perl code, by constructing a DFA to match many simple
+strings in parallel, and compiling that to native object code. Not all
+SpamAssassin rules are amenable to this conversion, however.
 
 %package	tools
 Summary:        Miscleanous tools for SpamAssassin
@@ -277,16 +294,19 @@ rm -rf %{buildroot}
 %config(noreplace) %{_sysconfdir}/mail/%{name}/spamassassin-default.rc
 %dir %attr(0777,root,root) /var/spool/spamassassin
 %dir /var/lib/spamassassin
-%attr(0755,root,root) %{_bindir}/sa-compile
 %attr(0755,root,root) %{_bindir}/sa-learn
 %attr(0755,root,root) %{_bindir}/spamassassin
 %attr(0755,root,root) %{_bindir}/sa-update
-%{_mandir}/man1/sa-compile.1*
 %{_mandir}/man1/sa-learn.1*
 %{_mandir}/man1/spamassassin.1*
 %{_mandir}/man1/sa-update.1*
 %{_mandir}/man1/spamassassin-run.1*
 %{_datadir}/spamassassin
+
+%files sa-compile
+%defattr(-,root,root)
+%attr(0755,root,root) %{_bindir}/sa-compile
+%{_mandir}/man1/sa-compile.1*
 
 %files tools
 %defattr(-,root,root)
