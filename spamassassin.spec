@@ -3,7 +3,7 @@
 Summary:	A spam filter for email which can be invoked from mail delivery agents
 Name:		spamassassin
 Version:	3.2.5
-Release:	%mkrel 7
+Release:	%mkrel 8
 License:	Apache License
 Group:		Networking/Mail
 URL:		http://spamassassin.org/
@@ -37,7 +37,7 @@ BuildRequires:	perl-DB_File
 BuildRequires:	perl-libwww-perl
 BuildRequires:	perl-Apache-Test
 BuildRequires:	perl-Socket6
-BuildRequires:	perl-IO-Socket-INET6
+BuildRequires:	perl(IO::Socket::INET6)
 Requires:	perl-Mail-SpamAssassin = %{version}
 Requires:  	perl-DB_File
 Requires:	perl-Net-DNS
