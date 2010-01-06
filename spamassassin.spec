@@ -7,7 +7,7 @@
 Summary:	A spam filter for email which can be invoked from mail delivery agents
 Name:		spamassassin
 Version:	3.2.5
-Release:	%mkrel 11
+Release:	%mkrel 12
 License:	Apache License
 Group:		Networking/Mail
 URL:		http://spamassassin.org/
@@ -23,6 +23,7 @@ Source8:	spamd.conf
 # (fc) 2.60-5mdk don't use version dependent perl call in #!
 Patch0:		spamassassin-3.2.0-fixbang.patch
 Patch1:		Mail-SpamAssassin-3.1.5-no_spamcop.diff
+Patch2:		Mail-SpamAssassin-3.2.5-y2k10_rule_bug.diff
 Requires(post): rpm-helper
 Requires(preun): rpm-helper
 BuildRequires:	openssl-devel
@@ -162,6 +163,7 @@ It's mostly compatible with the original spamd.
 %setup -q -n %{fname}-%{version}
 %patch0 -p1 -b .fixbang
 %patch1 -p0
+%patch2 -p0
 
 cp %{SOURCE2} spamd.init
 cp %{SOURCE3} spamd.sysconfig
@@ -294,7 +296,7 @@ rm -rf %{buildroot}
 %doc README Changes sample-*.txt procmailrc.example INSTALL TRADEMARK
 %doc CREDITS UPGRADE USAGE
 %dir %{_sysconfdir}/mail/%{name}
-%dir %{_sysconfdir}/mail/%{name}/sa-update-keys
+%dir %attr(0700,root,root) %{_sysconfdir}/mail/%{name}/sa-update-keys
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/mail/%{name}/*.cf
 %config(noreplace) %{_sysconfdir}/mail/%{name}/*.pre
 %config(noreplace) %{_sysconfdir}/mail/%{name}/spamassassin-default.rc
