@@ -202,7 +202,10 @@ make FULLPERL="%{_bindir}/perl" test
 %install
 rm -rf %{buildroot}
 
-%makeinstall_std
+%makeinstall_std \
+    INSTALLDATA=%{buildroot}%{_datadir}/spamassassin \
+    INSTALLSITEDATA=%{buildroot}%{_datadir}/spamassassin \
+    INSTALLVENDORDATA=%{buildroot}%{_datadir}/spamassassin
 
 pushd spamd-apache2
     %makeinstall_std
