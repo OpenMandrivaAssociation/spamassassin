@@ -238,6 +238,9 @@ install -m0644 spamd.conf %{buildroot}/%{_sysconfdir}/httpd/conf/webapps.d/spamd
 install -m0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/mail/spamassassin/
 install -m0644 %{SOURCE5} %{buildroot}%{_sysconfdir}/mail/spamassassin/
 
+# bork bork
+install -m0644 rules/*.pre %{buildroot}%{_sysconfdir}/mail/%{name}/
+
 # cleanup
 rm -f %{buildroot}%{_bindir}/apache-spamd.pl
 rm -f %{buildroot}%{_mandir}/man1/apache-spamd.pl.1*
