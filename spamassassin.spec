@@ -6,8 +6,8 @@
 
 Summary:	A spam filter for email which can be invoked from mail delivery agents
 Name:		spamassassin
-Version:	3.2.5
-Release:	%mkrel 13
+Version:	3.3.0
+Release:	%mkrel 0.1
 License:	Apache License
 Group:		Networking/Mail
 URL:		http://spamassassin.org/
@@ -23,31 +23,41 @@ Source8:	spamd.conf
 # (fc) 2.60-5mdk don't use version dependent perl call in #!
 Patch0:		spamassassin-3.2.0-fixbang.patch
 Patch1:		Mail-SpamAssassin-3.1.5-no_spamcop.diff
-Patch2:		Mail-SpamAssassin-3.2.5-y2k10_rule_bug.diff
 Requires(post): rpm-helper
 Requires(preun): rpm-helper
+BuildRequires:	gnupg
 BuildRequires:	openssl-devel
-BuildRequires:	perl-Archive-Tar
-BuildRequires:	perl-Digest-SHA1
+BuildRequires:	perl-Apache-Test
+BuildRequires:	perl(Archive::Tar)
+BuildRequires:	perl-DB_File
+BuildRequires:	perl-devel
+BuildRequires:	perl(Digest::SHA)
+BuildRequires:	perl-Encode-Detect
+BuildRequires:	perl(ExtUtils::MakeMaker) >= 6.17
 BuildRequires:	perl-HTML-Parser
+BuildRequires:	perl(IO::Socket::INET6)
 BuildRequires:	perl-IO-Socket-SSL
 BuildRequires:	perl-IO-Zlib
 BuildRequires:	perl-IP-Country
-BuildRequires:	perl-Mail-SPF-Query
+BuildRequires:	perl-libwww-perl
+BuildRequires:	perl-Mail-DKIM >= 0.37
+BuildRequires:	perl-Mail-SPF
 BuildRequires:	perl-Net-DNS
 BuildRequires:	perl-Net-Ident
-BuildRequires:	perl-Time-HiRes
-BuildRequires:	perl-devel
-BuildRequires:	perl-DB_File
-BuildRequires:	perl-libwww-perl
-BuildRequires:	perl-Apache-Test
 BuildRequires:	perl-Socket6
-BuildRequires:	perl(IO::Socket::INET6)
+BuildRequires:	perl-Sys-Hostname-Long
+BuildRequires:	perl-Time-HiRes
+BuildRequires:	perl-version
+BuildRequires:	re2c
 Requires:	perl-Mail-SpamAssassin = %{version}
+Requires:	perl(Archive::Tar)
 Requires:  	perl-DB_File
+Requires:	perl(NetAddr::IP)
 Requires:	perl-Net-DNS
+Requires:	perl(Time::HiRes)
+Requires:	spamassassin-rules >= 3.3.0
 # (oe) these are not required, but if not it cripples the SpamAssassin functionalities
-%define opt_deps perl-Archive-Tar perl-Encode-Detect perl-IO-Socket-SSL perl-IO-Zlib perl-IP-Country perl-Mail-DomainKeys perl-Mail-DKIM perl-Mail-SPF perl-Mail-SPF-Query perl-Net-Ident perl-Sys-Hostname-Long perl-libwww-perl perl-version gnupg
+%define opt_deps gnupg perl(Digest::SHA) perl-Encode-Detect perl-IO-Socket-SSL perl-IO-Zlib perl-IP-Country perl-libwww-perl perl-Mail-DKIM >= 0.37 perl-Mail-SPF perl-Net-Ident perl-Sys-Hostname-Long perl-version
 %if %mdkversion < 200810
 Requires:	%{opt_deps}
 %endif
@@ -72,7 +82,6 @@ as Vipul's Razor, DCC or pyzor.
 Install perl-Razor-Agent package to get Vipul's Razor support. 
 Install dcc package to get Distributed Checksum Clearinghouse (DCC) support.
 Install pyzor package to get Pyzor support.
-Install perl-Mail-SPF-Query package to get SPF support.
 
 To enable spamassassin, if you are receiving mail locally, simply add
 this line to your ~/.procmailrc:
@@ -111,7 +120,7 @@ See /usr/share/doc/spamassassin-tools-*/.
 %package	spamd
 Summary:	Daemonized version of SpamAssassin
 Group:		System/Servers
-Requires(post): rpm-helper
+Requires(post): rpm-helper spamassassin-rules >= 3.3.0
 Requires(preun): rpm-helper
 Requires:	spamassassin = %{version}
 
@@ -161,9 +170,8 @@ It's mostly compatible with the original spamd.
 %prep
 
 %setup -q -n %{fname}-%{version}
-%patch0 -p1 -b .fixbang
+%patch0 -p0 -b .fixbang
 %patch1 -p0
-%patch2 -p0
 
 cp %{SOURCE2} spamd.init
 cp %{SOURCE3} spamd.sysconfig
@@ -202,10 +210,7 @@ make FULLPERL="%{_bindir}/perl" test
 %install
 rm -rf %{buildroot}
 
-%makeinstall_std \
-    INSTALLDATA=%{buildroot}%{_datadir}/spamassassin \
-    INSTALLSITEDATA=%{buildroot}%{_datadir}/spamassassin \
-    INSTALLVENDORDATA=%{buildroot}%{_datadir}/spamassassin
+%makeinstall_std
 
 pushd spamd-apache2
     %makeinstall_std
@@ -221,12 +226,20 @@ install -d %{buildroot}/var/log/spamassassin
 install -d %{buildroot}/var/lib/spamassassin
 install -d %{buildroot}%{_sysconfdir}/httpd/conf/webapps.d
 
+cat << EOF >> %{buildroot}%{_sysconfdir}/mail/%{name}/v330.pre
+
+# Mail::SpamAssassin::Plugin::AWL - Normalize scores via auto-whitelist
+loadplugin Mail::SpamAssassin::Plugin::AWL
+EOF
+
 cat << EOF >> %{buildroot}%{_sysconfdir}/mail/%{name}/local.cf
 required_hits 5
 rewrite_header Subject [SPAM]
 report_safe 0
+ifplugin Mail::SpamAssassin::Plugin::AWL
 auto_whitelist_path        /var/spool/spamassassin/auto-whitelist
 auto_whitelist_file_mode   0666
+endif # Mail::SpamAssassin::Plugin::AWL
 EOF
 
 install -m0755 spamd.init %{buildroot}%{_initrddir}/spamd
@@ -308,9 +321,11 @@ rm -rf %{buildroot}
 %config(noreplace) %{_sysconfdir}/mail/%{name}/spamassassin-default.rc
 %dir %attr(0777,root,root) /var/spool/spamassassin
 %dir /var/lib/spamassassin
+%attr(0755,root,root) %{_bindir}/sa-awl
+%attr(0755,root,root) %{_bindir}/sa-check_spamd
 %attr(0755,root,root) %{_bindir}/sa-learn
-%attr(0755,root,root) %{_bindir}/spamassassin
 %attr(0755,root,root) %{_bindir}/sa-update
+%attr(0755,root,root) %{_bindir}/spamassassin
 %{_mandir}/man1/sa-learn.1*
 %{_mandir}/man1/spamassassin.1*
 %{_mandir}/man1/sa-update.1*
