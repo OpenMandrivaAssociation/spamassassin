@@ -6,13 +6,13 @@
 
 Summary:	A spam filter for email which can be invoked from mail delivery agents
 Name:		spamassassin
-Version:	3.3.0
-Release:	%mkrel 3
+Version:	3.3.1
+Release:	%mkrel 1
 License:	Apache License
 Group:		Networking/Mail
 URL:		http://spamassassin.org/
-Source0:	http://www.apache.org/dist/spamassassin/source/%{fname}-%{version}.tar.gz
-Source1:	http://www.apache.org/dist/spamassassin/source/%{fname}-%{version}.tar.gz.asc
+Source0:	http://www.apache.org/dist/spamassassin/source/%{fname}-%{version}.tar.bz2
+Source1:	http://www.apache.org/dist/spamassassin/source/%{fname}-%{version}.tar.bz2.asc
 Source2:	spamd.init
 Source3:	spamd.sysconfig
 Source4:	spamassassin-default.rc
