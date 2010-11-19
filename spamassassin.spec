@@ -3,16 +3,19 @@
 %endif
 
 %define fname Mail-SpamAssassin
+%define svn_snap r1036809
 
 Summary:	A spam filter for email which can be invoked from mail delivery agents
 Name:		spamassassin
-Version:	3.3.1
-Release:	%mkrel 5
+Version:	3.3.2
+Release:	%mkrel 0.0.%{svn_snap}.0
 License:	Apache License
 Group:		Networking/Mail
 URL:		http://spamassassin.apache.org/
-Source0:	http://www.apache.org/dist/spamassassin/source/%{fname}-%{version}.tar.bz2
-Source1:	http://www.apache.org/dist/spamassassin/source/%{fname}-%{version}.tar.bz2.asc
+#Source0:	http://www.apache.org/dist/spamassassin/source/%{fname}-%{version}.tar.bz2
+#Source1:	http://www.apache.org/dist/spamassassin/source/%{fname}-%{version}.tar.bz2.asc
+#svn co https://svn.apache.org/repos/asf/spamassassin/branches/3.3 spamassassin-3.3.x
+Source0:	%{fname}-3.3.x.tar.gz
 Source2:	spamd.init
 Source3:	spamd.sysconfig
 Source4:	spamassassin-default.rc
@@ -173,7 +176,7 @@ It's mostly compatible with the original spamd.
 
 %prep
 
-%setup -q -n %{fname}-%{version}
+%setup -q -n %{fname}-3.3.x
 %patch0 -p0 -b .fixbang
 %patch1 -p0
 
@@ -182,6 +185,11 @@ cp %{SOURCE3} spamd.sysconfig
 cp %{SOURCE6} sa-update.cron
 cp %{SOURCE7} spamd.logrotate
 cp %{SOURCE8} spamd.conf
+
+# svn cleansing...
+for i in `find . -type d -name .svn`; do
+    if [ -e "$i" ]; then rm -rf $i; fi >&/dev/null
+done
 
 %build
 
@@ -200,15 +208,18 @@ pushd spamd-apache2
     %make
 popd
 
+%check
 #cat >> t/config.dist << EOF
 #run_net_tests=y
 #run_spamd_prefork_stress_test=y
 #EOF
-
-%check
 export LANG=C 
 export LC_ALL=C
 export LANGUAGE=C
+# useless and broken test case
+rm -f t/make_install.t
+# requires polish locales?!?
+rm -f t/lang_pl_tests.t
 make FULLPERL="%{_bindir}/perl" test
 
 %install
@@ -261,6 +272,10 @@ install -m0644 rules/*.pre %{buildroot}%{_sysconfdir}/mail/%{name}/
 # cleanup
 rm -f %{buildroot}%{_bindir}/apache-spamd.pl
 rm -f %{buildroot}%{_mandir}/man1/apache-spamd.pl.1*
+
+# these are not meant to be relased
+rm -f %{buildroot}%{perl_vendorlib}/Mail/SpamAssassin/Plugin/P595Body.pm
+rm -f %{buildroot}%{perl_vendorlib}/Mail/SpamAssassin/Plugin/RabinKarpBody.pm
 
 %post
 [ -f %{_sysconfdir}/spamassassin.cf ] && %{__mv} %{_sysconfdir}/spamassassin.cf %{_sysconfdir}/mail/spamassassin/migrated.cf || true
@@ -362,21 +377,111 @@ rm -rf %{buildroot}
 
 %files -n perl-%{fname}
 %defattr(644,root,root,755)
-%dir %{perl_vendorlib}/Mail
-%{perl_vendorlib}/Mail/SpamAssassin*
-%exclude %{perl_vendorlib}/Mail/SpamAssassin/Spamd
-%exclude %{perl_vendorlib}/Mail/SpamAssassin/Spamd.pm
+%dir %{perl_vendorlib}/Mail/SpamAssassin
+%{perl_vendorlib}/Mail/SpamAssassin/*.pm
+%{perl_vendorlib}/Mail/SpamAssassin.pm
 %{perl_vendorlib}/spamassassin-run.pod
-%{_mandir}/man3*/*
-%exclude %{_mandir}/man3/Mail::SpamAssassin::Spamd::*
-%exclude %{_mandir}/man3/Mail::SpamAssassin::Spamd.*
+%dir %{perl_vendorlib}/Mail/SpamAssassin/Bayes
+%dir %{perl_vendorlib}/Mail/SpamAssassin/BayesStore
+%dir %{perl_vendorlib}/Mail/SpamAssassin/Conf
+%dir %{perl_vendorlib}/Mail/SpamAssassin/Locker
+%dir %{perl_vendorlib}/Mail/SpamAssassin/Logger
+%dir %{perl_vendorlib}/Mail/SpamAssassin/Message
+%dir %{perl_vendorlib}/Mail/SpamAssassin/Message/Metadata
+%dir %{perl_vendorlib}/Mail/SpamAssassin/Plugin
+%dir %{perl_vendorlib}/Mail/SpamAssassin/Util
+%{perl_vendorlib}/Mail/SpamAssassin/Bayes/*.pm
+%{perl_vendorlib}/Mail/SpamAssassin/BayesStore/*.pm
+%{perl_vendorlib}/Mail/SpamAssassin/Conf/*.pm
+%{perl_vendorlib}/Mail/SpamAssassin/Locker/*.pm
+%{perl_vendorlib}/Mail/SpamAssassin/Logger/*.pm
+%{perl_vendorlib}/Mail/SpamAssassin/Message/Metadata/*.pm
+%{perl_vendorlib}/Mail/SpamAssassin/Message/*.pm
+%{perl_vendorlib}/Mail/SpamAssassin/Plugin/*.pm
+%{perl_vendorlib}/Mail/SpamAssassin/Util/*.pm
+%{_mandir}/man3/Mail::SpamAssassin.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::AICache.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::ArchiveIterator.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::AsyncLoop.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::AutoWhitelist.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Bayes.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::BayesStore.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::BayesStore::BDB.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::BayesStore::MySQL.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::BayesStore::PgSQL.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::BayesStore::SQL.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Client.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Conf.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Conf::LDAP.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Conf::Parser.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Conf::SQL.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::DnsResolver.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Logger.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Logger::File.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Logger::Stderr.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Logger::Syslog.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Message.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Message::Metadata.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Message::Node.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::PerMsgLearner.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::PerMsgStatus.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::PersistentAddrList.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::AccessDB.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::AntiVirus.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::ASN.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::AutoLearnThreshold.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::AWL.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::Bayes.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::BodyRuleBaseExtractor.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::Check.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::DCC.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::DKIM.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::PluginHandler.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::Hashcash.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::MIMEHeader.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::NetCache.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::OneLineBodyRuleType.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::PhishTag.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::Pyzor.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::Razor2.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::RelayCountry.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::ReplaceTags.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::Reuse.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::Rule2XSBody.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::Shortcircuit.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::SpamCop.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::SPF.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::Test.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::TextCat.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::URIDetail.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::URIDNSBL.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::VBounce.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::WhiteListSubject.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::SQLBasedAddrList.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::SubProcBackChannel.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Timeout.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Util.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Util::DependencyInfo.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Util::Progress.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Util::RegistrarBoundaries.3pm*
+%{_mandir}/man3/spamassassin-run.3pm*
 
 %files -n perl-%{fname}-Spamd
 %defattr(644,root,root,755)
 %doc spamd-apache2/README.apache
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/httpd/conf/webapps.d/spamd.conf
 %dir %{perl_vendorlib}/Mail/SpamAssassin/Spamd
-%{perl_vendorlib}/Mail/SpamAssassin/Spamd/*
+%{perl_vendorlib}/Mail/SpamAssassin/Spamd/Apache2.pm
+%{perl_vendorlib}/Mail/SpamAssassin/Spamd/Config.pm
 %{perl_vendorlib}/Mail/SpamAssassin/Spamd.pm
-%{_mandir}/man3/Mail::SpamAssassin::Spamd::*
-%{_mandir}/man3/Mail::SpamAssassin::Spamd.*
+%dir %{perl_vendorlib}/Mail/SpamAssassin/Spamd/Apache2
+%{perl_vendorlib}/Mail/SpamAssassin/Spamd/Apache2/AclRFC1413.pm
+%{perl_vendorlib}/Mail/SpamAssassin/Spamd/Apache2/Config.pm
+%{perl_vendorlib}/Mail/SpamAssassin/Spamd/Apache2/AclIP.pm
+%{_mandir}/man3/Mail::SpamAssassin::Spamd.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Spamd::Apache2.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Spamd::Apache2::AclIP.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Spamd::Apache2::AclRFC1413.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Spamd::Apache2::Config.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Spamd::Config.3pm*
