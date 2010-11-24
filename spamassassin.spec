@@ -8,7 +8,7 @@
 Summary:	A spam filter for email which can be invoked from mail delivery agents
 Name:		spamassassin
 Version:	3.3.2
-Release:	%mkrel 0.0.%{svn_snap}.0
+Release:	%mkrel 0.0.%{svn_snap}.1
 License:	Apache License
 Group:		Networking/Mail
 URL:		http://spamassassin.apache.org/
@@ -96,7 +96,7 @@ To filter spam for all users, add that line to /etc/procmailrc
 %package	sa-compile
 Summary:	Compiles SpamAssassin rulesets into native perl code
 Group:		Networking/Mail
-Requires:	gcc
+Requires:	gcc make
 Requires:	perl-devel
 Requires:	re2c
 Conflicts:	spamassassin < 3.2.5-3
