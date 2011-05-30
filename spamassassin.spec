@@ -3,12 +3,12 @@
 %endif
 
 %define fname Mail-SpamAssassin
-%define svn_snap r1036809
+%define svn_snap r1128990
 
 Summary:	A spam filter for email which can be invoked from mail delivery agents
 Name:		spamassassin
 Version:	3.3.2
-Release:	%mkrel 0.0.%{svn_snap}.2
+Release:	%mkrel 0.0.%{svn_snap}.1
 License:	Apache License
 Group:		Networking/Mail
 URL:		http://spamassassin.apache.org/
@@ -192,6 +192,7 @@ for i in `find . -type d -name .svn`; do
 done
 
 %build
+%serverbuild
 
 %{__perl} \
     Makefile.PL \
@@ -201,7 +202,7 @@ done
     ENABLE_SSL=yes \
     RUN_NET_TESTS=no < /dev/null
 
-%make OPTIMIZE="%{optflags}" LDFLAGS="%{ldflags}"
+%make
 
 pushd spamd-apache2
     %{__perl} Makefile.PL INSTALLDIRS=vendor < /dev/null
@@ -347,6 +348,7 @@ rm -rf %{buildroot}
 %{_mandir}/man1/spamassassin.1*
 %{_mandir}/man1/sa-update.1*
 %{_mandir}/man1/spamassassin-run.1*
+%{_mandir}/man1/sa-awl.1*
 %{_datadir}/spamassassin
 
 %files sa-compile
