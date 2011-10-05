@@ -52,7 +52,7 @@ BuildRequires:	perl-Sys-Hostname-Long
 BuildRequires:	perl-Time-HiRes
 BuildRequires:	perl-version
 BuildRequires:	re2c
-Requires:	perl-Mail-SpamAssassin = %{version}
+Requires:	perl-Mail-SpamAssassin >= %{version}
 Requires:	perl(Archive::Tar)
 Requires:  	perl-DB_File
 Requires:	perl(NetAddr::IP)
@@ -114,7 +114,7 @@ SpamAssassin rules are amenable to this conversion, however.
 %package	tools
 Summary:        Miscleanous tools for SpamAssassin
 Group:		Networking/Mail
-Requires:	perl-Mail-SpamAssassin = %{version}
+Requires:	perl-Mail-SpamAssassin >= %{version}
 
 %description	tools
 Miscleanous tools from various authors, distributed with SpamAssassin.
@@ -125,7 +125,7 @@ Summary:	Daemonized version of SpamAssassin
 Group:		System/Servers
 Requires(post): rpm-helper spamassassin-rules >= 3.3.0
 Requires(preun): rpm-helper
-Requires:	spamassassin = %{version}
+Requires:	spamassassin >= %{version}
 
 %description	spamd
 The purpose of this program is to provide a daemonized version of the
@@ -176,7 +176,7 @@ It's mostly compatible with the original spamd.
 
 %prep
 
-%setup -q -n %{fname}-3.3.x
+%setup -q -n %{fname}-%{version}
 %patch0 -p0 -b .fixbang
 %patch1 -p0
 
