@@ -442,7 +442,6 @@ rm -rf %{buildroot}
 %{_mandir}/man3/Mail::SpamAssassin::PluginHandler.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::Hashcash.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::MIMEHeader.3pm*
-%{_mandir}/man3/Mail::SpamAssassin::Plugin::NetCache.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::OneLineBodyRuleType.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::PhishTag.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::Pyzor.3pm*
