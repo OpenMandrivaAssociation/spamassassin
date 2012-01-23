@@ -1,7 +1,3 @@
-%if %mdkversion < 200900
-%define ldflags %{nil}
-%endif
-
 %define fname Mail-SpamAssassin
 %define svn_snap r1128990
 
@@ -60,14 +56,7 @@ Requires:	perl-Net-DNS
 Requires:	perl(Time::HiRes)
 Requires:	spamassassin-rules >= 3.3.0
 # (oe) these are not required, but if not it cripples the SpamAssassin functionalities
-%define opt_deps gnupg perl(Digest::SHA) perl-Encode-Detect perl-IO-Socket-SSL perl-IO-Zlib perl-IP-Country perl-libwww-perl perl-Mail-DKIM >= 0.37 perl-Mail-SPF perl-Net-Ident perl-Sys-Hostname-Long perl-version
-%if %mdkversion < 200810
-Requires:	%{opt_deps}
-%endif
-%if %mdkversion >= 200810
-Suggests:	%{opt_deps}
-%endif
-Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
+Suggests:	gnupg perl(Digest::SHA) perl-Encode-Detect perl-IO-Socket-SSL perl-IO-Zlib perl-IP-Country perl-libwww-perl perl-Mail-DKIM >= 0.37 perl-Mail-SPF perl-Net-Ident perl-Sys-Hostname-Long perl-version
 
 %description
 SpamAssassin provides you with a way to reduce if not completely eliminate
@@ -327,11 +316,7 @@ fi
 %_postun_webapp
 %endif
 
-%clean
-rm -rf %{buildroot}
-
 %files
-%defattr(-,root,root)
 %doc README Changes sample-*.txt procmailrc.example INSTALL TRADEMARK
 %doc CREDITS UPGRADE USAGE
 %dir %{_sysconfdir}/mail/%{name}
@@ -354,16 +339,13 @@ rm -rf %{buildroot}
 %{_datadir}/spamassassin
 
 %files sa-compile
-%defattr(-,root,root)
 %attr(0755,root,root) %{_bindir}/sa-compile
 %{_mandir}/man1/sa-compile.1*
 
 %files tools
-%defattr(-,root,root)
 %doc sql ldap
 
 %files spamd
-%defattr(-,root,root)
 %doc spamd/README* spamd/PROTOCOL
 %attr(0700,root,root) %{_sysconfdir}/cron.daily/sa-update
 %attr(0755,root,root) %{_initrddir}/spamd
@@ -374,15 +356,14 @@ rm -rf %{buildroot}
 %dir %attr(0755,root,root) /var/log/spamassassin
 
 %files spamc
-%defattr(-,root,root)
 %config(noreplace) %{_sysconfdir}/mail/%{name}/spamassassin-spamc.rc
 %attr(0755,root,root) %{_bindir}/spamc
 %{_mandir}/man1/spamc.1*
 
 %files -n perl-%{fname}
-%defattr(644,root,root,755)
 %dir %{perl_vendorlib}/Mail/SpamAssassin
 %{perl_vendorlib}/Mail/SpamAssassin/*.pm
+%exclude %{perl_vendorlib}/Mail/SpamAssassin/Spamd.pm
 %{perl_vendorlib}/Mail/SpamAssassin.pm
 %{perl_vendorlib}/spamassassin-run.pod
 %dir %{perl_vendorlib}/Mail/SpamAssassin/Bayes
@@ -471,7 +452,6 @@ rm -rf %{buildroot}
 %{_mandir}/man3/spamassassin-run.3pm*
 
 %files -n perl-%{fname}-Spamd
-%defattr(644,root,root,755)
 %doc spamd-apache2/README.apache
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/httpd/conf/webapps.d/spamd.conf
 %dir %{perl_vendorlib}/Mail/SpamAssassin/Spamd
