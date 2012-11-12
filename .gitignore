@@ -1,0 +1,9 @@
+Mail-SpamAssassin-3.3.2.tar.gz
+Mail-SpamAssassin-3.3.2.tar.gz.asc
+sa-update.cron
+spamassassin-default.rc
+spamassassin-spamc.rc
+spamd.conf
+spamd.init
+spamd.logrotate
+spamd.sysconfig

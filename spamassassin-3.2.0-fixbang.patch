@@ -1,0 +1,35 @@
+--- Makefile.PL	2010-01-21 13:18:57.000000000 +0100
++++ Makefile.PL.oden	2010-01-24 15:08:49.313637884 +0100
+@@ -1022,25 +1022,25 @@
+ 		  -DPERL_TAINT="$(PERL_TAINT)"
+ 
+ spamassassin: spamassassin.raw
+-	$(PREPROCESS) $(FIXBYTES) $(FIXVARS) $(FIXBANG) -m$(PERM_RWX) -i$? -o$@
++	$(PREPROCESS) $(FIXBYTES) $(FIXVARS) -m$(PERM_RWX) -i$? -o$@
+ 
+ sa-learn: sa-learn.raw
+-	$(PREPROCESS) $(FIXBYTES) $(FIXVARS) $(FIXBANG) -m$(PERM_RWX) -i$? -o$@
++	$(PREPROCESS) $(FIXBYTES) $(FIXVARS) -m$(PERM_RWX) -i$? -o$@
+ 
+ sa-update: sa-update.raw build_rules
+-	$(PREPROCESS) $(FIXBYTES) $(FIXVARS) $(FIXBANG) -m$(PERM_RWX) -isa-update.raw -osa-update
++	$(PREPROCESS) $(FIXBYTES) $(FIXVARS) -m$(PERM_RWX) -isa-update.raw -osa-update
+ 
+ sa-compile: sa-compile.raw
+-	$(PREPROCESS) $(FIXBYTES) $(FIXVARS) $(FIXBANG) -m$(PERM_RWX) -isa-compile.raw -osa-compile
++	$(PREPROCESS) $(FIXBYTES) $(FIXVARS) -m$(PERM_RWX) -isa-compile.raw -osa-compile
+ 
+ sa-awl: sa-awl.raw
+-	$(PREPROCESS) $(FIXBYTES) $(FIXVARS) $(FIXBANG) -m$(PERM_RWX) -isa-awl.raw -osa-awl
++	$(PREPROCESS) $(FIXBYTES) $(FIXVARS) -m$(PERM_RWX) -isa-awl.raw -osa-awl
+ 
+ sa-check_spamd: sa-check_spamd.raw
+-	$(PREPROCESS) $(FIXBYTES) $(FIXVARS) $(FIXBANG) -m$(PERM_RWX) -isa-check_spamd.raw -osa-check_spamd
++	$(PREPROCESS) $(FIXBYTES) $(FIXVARS) -m$(PERM_RWX) -isa-check_spamd.raw -osa-check_spamd
+ 
+ spamd/spamd: spamd/spamd.raw
+-	$(PREPROCESS) $(FIXBYTES) $(FIXVARS) $(FIXBANG) -m$(PERM_RWX) -i$? -o$@
++	$(PREPROCESS) $(FIXBYTES) $(FIXVARS) -m$(PERM_RWX) -i$? -o$@
+ 
+ build_rules: 
+ 	$(PERL) build/mkrules --exit_on_no_src --src rulesrc --out rules --manifest MANIFEST --manifestskip MANIFEST.SKIP

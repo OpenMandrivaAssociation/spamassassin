@@ -1,0 +1,10 @@
+sources:
+  "Mail-SpamAssassin-3.3.2.tar.gz:"	de954f69e190496eff4a796a9bab61747f03072b
+  "Mail-SpamAssassin-3.3.2.tar.gz.asc:"	f4a7923d13cebbaa78c285f10adb4f2eea39ac0d
+  "sa-update.cron:"	97c72ac655c11127587d569000944cd3f75217e6
+  "spamassassin-default.rc:"	57f1432a3faee561e35e4fae261dde01fb59f413
+  "spamassassin-spamc.rc:"	39a575badde5045d2b188bf849d349095e457c5d
+  "spamd.conf:"	5353a3e06cdff614def50b6362376c00664bc18f
+  "spamd.init:"	0ea2a9dc0a494580d5cc4d4b20c6450ddf951286
+  "spamd.logrotate:"	8a2e9bbeca8a1dc1d2e9d861bad928e5e7cc0b49
+  "spamd.sysconfig:"	3a9e462ec84fd56a5bb1b7616a39e802986248a2

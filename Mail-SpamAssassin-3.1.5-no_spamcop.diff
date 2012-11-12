@@ -1,0 +1,11 @@
+--- rules/v310.pre	2006-05-24 16:07:29.000000000 -0400
++++ rules/v310.pre.oden	2006-09-15 05:30:18.000000000 -0400
+@@ -28,7 +28,7 @@
+ 
+ # SpamCop - perform SpamCop message reporting
+ #
+-loadplugin Mail::SpamAssassin::Plugin::SpamCop
++#loadplugin Mail::SpamAssassin::Plugin::SpamCop
+ 
+ # AntiVirus - some simple anti-virus checks, this is not a replacement
+ # for an anti-virus filter like Clam AntiVirus
