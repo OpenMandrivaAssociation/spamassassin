@@ -1,0 +1,116 @@
+#!/bin/sh
+
+# A simple script to update the SA rules. There is very little error
+# checking here. It is implied your machine has network, dns resolving
+# and all that.
+# Oden Eriksson <oeriksson@mandriva.com>
+# 
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to you under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at:
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Source spamd configuration.
+if [ -f /etc/sysconfig/spamd ]; then
+    . /etc/sysconfig/spamd
+else
+    echo "ERROR: The /etc/sysconfig/spamd file is missing..."
+    exit 1
+fi
+
+if [ "${USE_SA_UPDATE}" == "1" ]; then
+
+    RETVAL1="0"
+    RETVAL2="0"
+    RETVAL3="0"
+    LOCKFILE="/tmp/sa-update.lock"
+
+    # yonder some
+    if [ -f ${LOCKFILE} ]; then
+	echo "ERROR: The ${LOCKFILE} file was found indicating an error. Maybe sa-update is still running..."
+	exit 1
+    fi
+
+    # make the lockfile
+    touch ${LOCKFILE}
+
+    # update the rules
+    /usr/bin/sa-update ${SA_UPDATE_OPTIONS}
+    RETVAL1="$?"
+
+    if [ $RETVAL1 -eq "0" ]; then
+
+	    # compile the rules
+	    if [ "${USE_SA_COMPILED_RULES}" == "1" ]; then
+		if ! [ -x /usr/bin/re2c ]; then
+		    echo "ERROR: /usr/bin/re2c is missing..."
+		    echo "please install the missing package like so: urpmi re2c"
+    		    exit 1
+		fi
+		if ! [ -x /usr/bin/sa-compile ]; then
+		    echo "ERROR: /usr/bin/sa-compile is missing..."
+		    echo "please install the missing package like so: urpmi spamassassin-sa-compile"
+    		    exit 1
+		fi
+		/usr/bin/sa-compile ${SA_COMPILE_OPTIONS}
+		RETVAL2="$?"
+		if [ $RETVAL2 -gt "0" ]; then
+		    echo "ERROR: There were problems compiling the rules, spamd may not be working properly..."
+    		    exit 1
+    		fi
+	    fi
+
+	# verify it's working
+	spamassassin --lint ${SA_LINT_OPTIONS}
+	RETVAL3="$?"
+	if [ $RETVAL3 -gt "0" ]; then
+	    echo "ERROR: There were problems with the configuration, spamd may not be working properly..."
+        fi
+
+	# restart spamd
+        /etc/rc.d/init.d/spamd condrestart
+
+	# verify it's running
+	SA_PID=`pidof spamd`
+	if [ -z "$SA_PID" ]; then
+	    echo "ERROR: spamd did not start..."
+	    rm -f ${LOCKFILE}
+	    exit 1
+	fi
+
+	# hopefully everything's ok
+	rm -f ${LOCKFILE}
+        exit 0
+    fi
+
+    # do nothing
+    if [ $RETVAL1 -eq "1" ]; then
+        rm -f ${LOCKFILE}
+        exit 0
+    fi
+
+    # do nothing
+    if [ $RETVAL1 -eq "4" ]; then
+	echo "ERROR: sa-update channel failure"
+	rm -f ${LOCKFILE}
+	exit 0
+    fi
+
+    # barf some
+    if [ $RETVAL1 -gt "4" ]; then
+        echo "ERROR: There were problems with the updated rules, spamd was not restarted..."
+	rm -f ${LOCKFILE}
+        exit 1
+    fi
+
+fi

@@ -1,0 +1,21 @@
+# Customized settings for spamassassin
+
+# Commandline options for spamd
+SPAMDOPTIONS="-d -c -m5 -H --syslog=/var/log/spamassassin/spamd.log"
+
+# Use sa-update to update the rules using cron (/etc/cron.daily/sa-update):
+# 0=no, 1=yes
+USE_SA_UPDATE="1"
+
+# Commandline options for sa-update (used by /etc/cron.daily/sa-update)
+SA_UPDATE_OPTIONS=""
+
+# Use sa-compile to compile the rules (used by /etc/cron.daily/sa-update)
+# 0=no, 1=yes
+USE_SA_COMPILED_RULES="0"
+
+# Commandline options for sa-compile (used by /etc/cron.daily/sa-update)
+SA_COMPILE_OPTIONS=""
+
+# Commandline options for spamassassin --lint (used by /etc/cron.daily/sa-update)
+SA_LINT_OPTIONS=""

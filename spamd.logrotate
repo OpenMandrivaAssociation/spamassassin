@@ -1,0 +1,12 @@
+/var/log/spamassassin/spamd.log {
+    missingok
+    notifempty
+    compress
+    daily
+    rotate 10
+    size=10M
+    sharedscripts
+    postrotate
+	/etc/rc.d/init.d/spamd condrestart
+    endscript
+}
