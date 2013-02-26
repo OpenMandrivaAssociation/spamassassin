@@ -4,7 +4,7 @@
 Summary:	A spam filter for email which can be invoked from mail delivery agents
 Name:		spamassassin
 Version:	3.3.2
-Release:	%mkrel 3
+Release:	4
 License:	Apache License
 Group:		Networking/Mail
 URL:		http://spamassassin.apache.org/
@@ -153,10 +153,6 @@ user's own mail user-agent application.
 Summary:        A mod_perl2 module implementing the spamd protocol
 Group:		Development/Perl
 Requires:       apache-mod_perl
-%if %mdkversion < 201010
-Requires(post):   rpm-helper
-Requires(postun):   rpm-helper
-%endif
 
 %description -n	perl-%{fname}-Spamd
 This distribution contains a mod_perl2 module, implementing the spamd protocol
@@ -215,8 +211,6 @@ rm -f t/spamd_ssl.t t/spamd_ssl_accept_fail.t t/spamd_ssl_tls.t t/spamd_ssl_v2.t
 make FULLPERL="%{_bindir}/perl" test
 
 %install
-rm -rf %{buildroot}
-
 %makeinstall_std
 
 pushd spamd-apache2
@@ -305,16 +299,6 @@ fi
 
 %preun spamd
 %_preun_service spamd
-
-%post -n perl-%{fname}-Spamd
-%if %mdkversion < 201010
-%_post_webapp
-%endif
-
-%postun -n perl-%{fname}-Spamd
-%if %mdkversion < 201010
-%_postun_webapp
-%endif
 
 %files
 %doc README Changes sample-*.txt procmailrc.example INSTALL TRADEMARK
