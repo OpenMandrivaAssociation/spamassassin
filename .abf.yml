@@ -1,5 +1,2 @@
-removed_sources:
-  Mail-SpamAssassin-3.3.2.tar.gz: de954f69e190496eff4a796a9bab61747f03072b
 sources:
-  Mail-SpamAssassin-3.4.0.tar.gz: 4dac1384282b6201f7d80cea8295933ef08e7e28
-  Mail-SpamAssassin-3.4.0.tar.gz.asc: 8c56d4f27481dab4f689b6e66495ffb571729434
+  Mail-SpamAssassin-3.4.1.tar.gz: e7b342d30f4983f70f4234480b489ccc7d2aa615
