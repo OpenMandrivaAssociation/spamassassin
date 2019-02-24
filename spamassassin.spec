@@ -438,7 +438,7 @@ fi
 %{_mandir}/man3/Mail::SpamAssassin::Util.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Util::DependencyInfo.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Util::Progress.3pm*
-%{_mandir}/man3/Mail::SpamAssassin::Util::RegistrarBoundaries.3pm*
+#{_mandir}/man3/Mail::SpamAssassin::Util::RegistrarBoundaries.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::BayesStore::Redis.3pm.xz
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::AskDNS.3pm.xz
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::DNSEval.3pm.xz
