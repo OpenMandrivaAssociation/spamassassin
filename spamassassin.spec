@@ -435,7 +435,7 @@ fi
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::FromNameSpoof.3pm.xz
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::HashBL.3pm.xz
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::Phishing.3pm.xz
-%{_mandir}/man/man3/Mail::SpamAssassin::Plugin::ResourceLimits.3pm.xz
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::ResourceLimits.3pm.xz
 %{_mandir}/man3/Mail::SpamAssassin::SQLBasedAddrList.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::SubProcBackChannel.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Timeout.3pm*
