@@ -447,6 +447,8 @@ fi
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::AskDNS.3pm.xz
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::DNSEval.3pm.xz
 %{_mandir}/man3/Mail::SpamAssassin::RegistryBoundaries.3pm.xz
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::FreeMail.3pm.xz
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::OLEVBMacro.3pm.xz
 
 %{_mandir}/man3/spamassassin-run.3pm*
 
