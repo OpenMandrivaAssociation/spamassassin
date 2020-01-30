@@ -1,9 +1,8 @@
 %define fname Mail-SpamAssassin
-%define svn_snap r1128990
 
 Summary:	A spam filter for email which can be invoked from mail delivery agents
 Name:		spamassassin
-Version:	3.4.3
+Version:	3.4.4
 Release:	1
 License:	Apache License
 Group:		Networking/Mail
@@ -432,10 +431,10 @@ fi
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::URILocalBL.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::VBounce.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::WhiteListSubject.3pm*
-%{_mandir}/man3/Mail::SpamAssassin::Plugin::FromNameSpoof.3pm.xz
-%{_mandir}/man3/Mail::SpamAssassin::Plugin::HashBL.3pm.xz
-%{_mandir}/man3/Mail::SpamAssassin::Plugin::Phishing.3pm.xz
-%{_mandir}/man3/Mail::SpamAssassin::Plugin::ResourceLimits.3pm.xz
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::FromNameSpoof.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::HashBL.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::Phishing.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::ResourceLimits.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::SQLBasedAddrList.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::SubProcBackChannel.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Timeout.3pm*
@@ -443,12 +442,12 @@ fi
 %{_mandir}/man3/Mail::SpamAssassin::Util::DependencyInfo.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Util::Progress.3pm*
 #{_mandir}/man3/Mail::SpamAssassin::Util::RegistrarBoundaries.3pm*
-%{_mandir}/man3/Mail::SpamAssassin::BayesStore::Redis.3pm.xz
-%{_mandir}/man3/Mail::SpamAssassin::Plugin::AskDNS.3pm.xz
-%{_mandir}/man3/Mail::SpamAssassin::Plugin::DNSEval.3pm.xz
-%{_mandir}/man3/Mail::SpamAssassin::RegistryBoundaries.3pm.xz
-%{_mandir}/man3/Mail::SpamAssassin::Plugin::FreeMail.3pm.xz
-%{_mandir}/man3/Mail::SpamAssassin::Plugin::OLEVBMacro.3pm.xz
+%{_mandir}/man3/Mail::SpamAssassin::BayesStore::Redis.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::AskDNS.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::DNSEval.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::RegistryBoundaries.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::FreeMail.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::OLEVBMacro.3pm*
 
 %{_mandir}/man3/spamassassin-run.3pm*
 
