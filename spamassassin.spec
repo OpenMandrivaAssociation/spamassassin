@@ -319,6 +319,7 @@ fi
 %{_mandir}/man1/sa-update.1*
 %{_mandir}/man1/spamassassin-run.1*
 %{_mandir}/man1/sa-awl.1*
+%{_mandir}/man1/sa-check_spamd.1.*
 %{_datadir}/spamassassin
 
 %files sa-compile
