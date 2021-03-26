@@ -2,15 +2,13 @@
 
 Summary:	A spam filter for email which can be invoked from mail delivery agents
 Name:		spamassassin
-Version:	3.4.4
+Version:	3.4.5
 Release:	1
 License:	Apache License
 Group:		Networking/Mail
 URL:		http://spamassassin.apache.org/
 Source0:	http://www.apache.org/dist/spamassassin/source/%{fname}-%{version}.tar.gz
 Source1:	http://www.apache.org/dist/spamassassin/source/%{fname}-%{version}.tar.gz.asc
-#svn co https://svn.apache.org/repos/asf/spamassassin/branches/3.3 spamassassin-3.3.x
-#Source0:	%{fname}-3.3.x.tar.gz
 Source2:	spamd.init
 Source3:	spamd.sysconfig
 Source4:	spamassassin-default.rc
@@ -24,7 +22,7 @@ Patch1:		Mail-SpamAssassin-3.1.5-no_spamcop.diff
 Requires(post): rpm-helper
 Requires(preun): rpm-helper
 BuildRequires:	gnupg
-BuildRequires:	openssl-devel
+BuildRequires:	pkgconfig(openssl)
 BuildRequires:	perl-Apache-Test
 BuildRequires:	perl(Archive::Tar)
 BuildRequires:	perl-DB_File
@@ -321,6 +319,7 @@ fi
 %{_mandir}/man1/sa-update.1*
 %{_mandir}/man1/spamassassin-run.1*
 %{_mandir}/man1/sa-awl.1*
+%{_mandir}/man1/sa-check_spamd.1.*
 %{_datadir}/spamassassin
 
 %files sa-compile
