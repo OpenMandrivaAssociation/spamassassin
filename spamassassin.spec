@@ -3,7 +3,7 @@
 Summary:	A spam filter for email which can be invoked from mail delivery agents
 Name:		spamassassin
 Version:	3.4.5
-Release:	3
+Release:	4
 License:	Apache License
 Group:		Networking/Mail
 URL:		http://spamassassin.apache.org/
