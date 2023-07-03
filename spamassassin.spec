@@ -372,7 +372,7 @@ fi
 %{_mandir}/man3/Mail::SpamAssassin::AICache.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::ArchiveIterator.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::AsyncLoop.3pm*
-#{_mandir}/man3/Mail::SpamAssassin::AutoWhitelist.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::AutoWelcomelist.3pm.*
 %{_mandir}/man3/Mail::SpamAssassin::Bayes.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::BayesStore.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::BayesStore::BDB.3pm*
@@ -385,6 +385,7 @@ fi
 %{_mandir}/man3/Mail::SpamAssassin::Conf::Parser.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Conf::SQL.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::DnsResolver.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::GeoDB.3pm.*
 %{_mandir}/man3/Mail::SpamAssassin::Logger.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Logger::File.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Logger::Stderr.3pm*
@@ -400,14 +401,17 @@ fi
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::AntiVirus.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::ASN.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::AutoLearnThreshold.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::AuthRes.3pm.*
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::AWL.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::Bayes.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::BodyRuleBaseExtractor.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::Check.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::DCC.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::DecodeShortURLs.3pm.*
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::DKIM.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::DMARC.3pm.*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::ExtractText.3pm.*
 %{_mandir}/man3/Mail::SpamAssassin::PluginHandler.3pm*
-#{_mandir}/man3/Mail::SpamAssassin::Plugin::Hashcash.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::MIMEEval.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::MIMEHeader.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::OneLineBodyRuleType.3pm*
@@ -429,7 +433,7 @@ fi
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::URIDNSBL.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::URILocalBL.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::VBounce.3pm*
-#{_mandir}/man3/Mail::SpamAssassin::Plugin::WhiteListSubject.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::WelcomeListSubject.3pm.*
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::FromNameSpoof.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::HashBL.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::Phishing.3pm*
@@ -440,7 +444,6 @@ fi
 %{_mandir}/man3/Mail::SpamAssassin::Util.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Util::DependencyInfo.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Util::Progress.3pm*
-#{_mandir}/man3/Mail::SpamAssassin::Util::RegistrarBoundaries.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::BayesStore::Redis.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::AskDNS.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::DNSEval.3pm*
