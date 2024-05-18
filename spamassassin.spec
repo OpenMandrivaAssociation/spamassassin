@@ -2,13 +2,13 @@
 
 Summary:	A spam filter for email which can be invoked from mail delivery agents
 Name:		spamassassin
-Version:	4.0.0
+Version:	4.0.1
 Release:	1
 License:	Apache License
 Group:		Networking/Mail
-URL:		http://spamassassin.apache.org/
-Source0:	http://www.apache.org/dist/spamassassin/source/%{fname}-%{version}.tar.gz
-Source1:	http://www.apache.org/dist/spamassassin/source/%{fname}-%{version}.tar.gz.asc
+URL:		https://spamassassin.apache.org/
+Source0:	https://www.apache.org/dist/spamassassin/source/%{fname}-%{version}.tar.gz
+Source1:	https://www.apache.org/dist/spamassassin/source/%{fname}-%{version}.tar.gz.asc
 Source2:	spamd.init
 Source3:	spamd.sysconfig
 Source4:	spamassassin-default.rc
