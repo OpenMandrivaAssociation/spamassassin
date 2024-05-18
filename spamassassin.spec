@@ -159,8 +159,8 @@ It's mostly compatible with the original spamd.
 %prep
 
 %setup -q -n %{fname}-%{version}
-%patch0 -p0 -b .fixbang
-%patch1 -p0
+%patch 0 -p0 -b .fixbang
+%patch 1 -p0
 
 cp %{SOURCE2} spamd.init
 cp %{SOURCE3} spamd.sysconfig
