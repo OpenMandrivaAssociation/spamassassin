@@ -368,6 +368,10 @@ fi
 %{perl_vendorlib}/Mail/SpamAssassin/Message/*.pm
 %{perl_vendorlib}/Mail/SpamAssassin/Plugin/*.pm
 %{perl_vendorlib}/Mail/SpamAssassin/Util/*.pm
+%{perl_vendorlib}/Mail/SpamAssassin/Pyzor/Client.pm
+%{perl_vendorlib}/Mail/SpamAssassin/Pyzor/Digest.pm
+%{perl_vendorlib}/Mail/SpamAssassin/Pyzor/Digest/Pieces.pm
+%{perl_vendorlib}/Mail/SpamAssassin/Pyzor/Digest/StripHtml.pm
 %{_mandir}/man3/Mail::SpamAssassin.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::AICache.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::ArchiveIterator.3pm*
@@ -450,6 +454,11 @@ fi
 %{_mandir}/man3/Mail::SpamAssassin::RegistryBoundaries.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::FreeMail.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::OLEVBMacro.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Pyzor.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Pyzor::Client.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Pyzor::Digest.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Pyzor::Digest::Pieces.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Pyzor::Digest::StripHtml.3pm*
 
 %{_mandir}/man3/spamassassin-run.3pm*
 
