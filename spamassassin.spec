@@ -2,13 +2,13 @@
 
 Summary:	A spam filter for email which can be invoked from mail delivery agents
 Name:		spamassassin
-Version:	4.0.0
+Version:	4.0.1
 Release:	1
 License:	Apache License
 Group:		Networking/Mail
-URL:		http://spamassassin.apache.org/
-Source0:	http://www.apache.org/dist/spamassassin/source/%{fname}-%{version}.tar.gz
-Source1:	http://www.apache.org/dist/spamassassin/source/%{fname}-%{version}.tar.gz.asc
+URL:		https://spamassassin.apache.org/
+Source0:	https://www.apache.org/dist/spamassassin/source/%{fname}-%{version}.tar.gz
+Source1:	https://www.apache.org/dist/spamassassin/source/%{fname}-%{version}.tar.gz.asc
 Source2:	spamd.init
 Source3:	spamd.sysconfig
 Source4:	spamassassin-default.rc
@@ -159,8 +159,8 @@ It's mostly compatible with the original spamd.
 %prep
 
 %setup -q -n %{fname}-%{version}
-%patch0 -p0 -b .fixbang
-%patch1 -p0
+%patch 0 -p0 -b .fixbang
+%patch 1 -p0
 
 cp %{SOURCE2} spamd.init
 cp %{SOURCE3} spamd.sysconfig
@@ -368,6 +368,10 @@ fi
 %{perl_vendorlib}/Mail/SpamAssassin/Message/*.pm
 %{perl_vendorlib}/Mail/SpamAssassin/Plugin/*.pm
 %{perl_vendorlib}/Mail/SpamAssassin/Util/*.pm
+%{perl_vendorlib}/Mail/SpamAssassin/Pyzor/Client.pm
+%{perl_vendorlib}/Mail/SpamAssassin/Pyzor/Digest.pm
+%{perl_vendorlib}/Mail/SpamAssassin/Pyzor/Digest/Pieces.pm
+%{perl_vendorlib}/Mail/SpamAssassin/Pyzor/Digest/StripHtml.pm
 %{_mandir}/man3/Mail::SpamAssassin.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::AICache.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::ArchiveIterator.3pm*
@@ -450,6 +454,11 @@ fi
 %{_mandir}/man3/Mail::SpamAssassin::RegistryBoundaries.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::FreeMail.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::OLEVBMacro.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Pyzor.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Pyzor::Client.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Pyzor::Digest.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Pyzor::Digest::Pieces.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Pyzor::Digest::StripHtml.3pm*
 
 %{_mandir}/man3/spamassassin-run.3pm*
 
