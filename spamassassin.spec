@@ -21,6 +21,7 @@ Patch0:		spamassassin-3.2.0-fixbang.patch
 Patch1:		Mail-SpamAssassin-3.1.5-no_spamcop.diff
 Requires(post): rpm-helper
 Requires(preun): rpm-helper
+BuildRequires:	make
 BuildRequires:	gnupg
 BuildRequires:	pkgconfig(openssl)
 BuildRequires:	perl-Apache-Test
