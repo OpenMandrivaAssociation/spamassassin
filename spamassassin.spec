@@ -353,6 +353,10 @@ fi
 %dir %{perl_vendorlib}/Mail/SpamAssassin/Bayes
 %dir %{perl_vendorlib}/Mail/SpamAssassin/BayesStore
 %dir %{perl_vendorlib}/Mail/SpamAssassin/Conf
+%dir %{perl_vendorlib}/Mail/SpamAssassin/HTML
+%{perl_vendorlib}/Mail/SpamAssassin/HTML/*.pm
+%dir %{perl_vendorlib}/Mail/SpamAssassin/Header
+%{perl_vendorlib}/Mail/SpamAssassin/Header/*.pm
 %dir %{perl_vendorlib}/Mail/SpamAssassin/Locker
 %dir %{perl_vendorlib}/Mail/SpamAssassin/Logger
 %dir %{perl_vendorlib}/Mail/SpamAssassin/Message
@@ -390,6 +394,9 @@ fi
 %{_mandir}/man3/Mail::SpamAssassin::Conf::SQL.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::DnsResolver.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::GeoDB.3pm.*
+%{_mandir}/man3/Mail::SpamAssassin::Header.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Header::ParameterHeader.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::HTML::Color.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Logger.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Logger::File.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Logger::Stderr.3pm*
@@ -440,6 +447,9 @@ fi
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::WelcomeListSubject.3pm.*
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::FromNameSpoof.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::HashBL.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::HeaderEval.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::Redirectors.3pm*
+%{_mandir}/man3/Mail::SpamAssassin::Plugin::WLBLEval.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::Phishing.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::Plugin::ResourceLimits.3pm*
 %{_mandir}/man3/Mail::SpamAssassin::SQLBasedAddrList.3pm*
